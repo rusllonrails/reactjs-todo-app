@@ -11,9 +11,9 @@ import './index.css';
 const App = () => {
 
   const todoData = [
-    { label: 'Drink Coffee', important: false, id: 1 },
-    { label: 'Make Awesome App', important: true, id: 2 },
-    { label: 'Have a lunch', important: false, id: 3 }
+    { label: 'Drink Coffee', id: 1 },
+    { label: 'Make Awesome App', id: 2 },
+    { label: 'Have a lunch', id: 3 }
   ];
 
   return (
