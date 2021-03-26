@@ -9,15 +9,45 @@ import AddTodoItem from './../add-todo-item';
 import './app.css';
 
 export default class App extends Component {
+
+  maxId = 100;
+
   constructor() {
     super();
     this.state = {
       todoData: [
-        { label: 'Drink Coffee', important: false, done: false, id: 1 },
-        { label: 'Make Awesome App', important: true, done: false, id: 2 },
-        { label: 'Have a lunch', important: false, done: true, id: 3 }
+        this.createTodoItem('Learn React JS'),
+        this.createTodoItem('Make Awesome App'),
+        this.createTodoItem('Have a lunch')
       ]
     };
+  }
+
+  createTodoItem(text) {
+    return {
+      label: text,
+      important: false,
+      done: false,
+      id: this.maxId++
+    };
+  }
+
+  toggleProperty(arr, id, propName) {
+    const idx = arr.findIndex((el) => el.id === id);
+    const currentItem = arr[idx];
+
+    const updatedItem = {
+      ...currentItem,
+      [propName]: !currentItem[propName]
+    };
+
+    const newArray = [
+      ...arr.slice(0, idx),
+      updatedItem,
+      ...arr.slice(idx + 1)
+    ];
+
+    return newArray;
   }
 
   deleteItem = (id) => {
@@ -39,12 +69,7 @@ export default class App extends Component {
 
   addItem = (text) => {
     this.setState(({todoData}) => {
-      const nextId = Math.max(...todoData.map(function(o){return o.id;})) + 1;
-
-      const newItem = {
-        label: text,
-        id: nextId
-      }
+      const newItem = this.createTodoItem(text);
 
       const newTodoData = [
         ...todoData,
@@ -58,11 +83,19 @@ export default class App extends Component {
   }
 
   markAsDone = (id) => {
-    console.log('marked as done: ', id);
+    this.setState(({ todoData }) => {
+      return {
+        todoData: this.toggleProperty(todoData, id, 'done')
+      }
+    });
   }
 
   markAsImportant = (id) => {
-    console.log('marked as important: ', id);
+    this.setState(({ todoData }) => {
+      return {
+        todoData: this.toggleProperty(todoData, id, 'important')
+      }
+    });
   }
 
   render() {
