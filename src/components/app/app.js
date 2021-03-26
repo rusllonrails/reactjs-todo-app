@@ -19,7 +19,8 @@ export default class App extends Component {
         this.createTodoItem('Learn React JS'),
         this.createTodoItem('Make Awesome App'),
         this.createTodoItem('Have a lunch')
-      ]
+      ],
+      term: ''
     };
   }
 
@@ -48,6 +49,14 @@ export default class App extends Component {
     ];
 
     return newArray;
+  }
+
+  onSearchChanged = (term) => {
+    console.log('term: ' + term);
+
+    this.setState({
+      term: term
+    });
   }
 
   deleteItem = (id) => {
@@ -98,16 +107,33 @@ export default class App extends Component {
     });
   }
 
+  search(arr, term) {
+    if (term.length < 1) {
+      return arr;
+    }
+
+    return (
+      arr.filter(
+        (el) => el.label.toLowerCase().indexOf(this.state.term.toLowerCase()) > -1
+      )
+    );
+  }
+
   render() {
+    const allItems = this.state.todoData;
+    const doneList = allItems.filter((el) => el.done).length;
+    const todoList = allItems.length - doneList;
+    const visibleItems = this.search(allItems, this.state.term);
+
     return (
       <div className="todo-app">
-        <AppHeader toDo={1} done={3} />
+        <AppHeader toDo={todoList} done={doneList} />
         <div className="top-panel d-flex">
-          <SearchPanel />
+          <SearchPanel onSearchChanged={ this.onSearchChanged } />
           <ItemStatusFilter />
         </div>
 
-        <TodoList todos={this.state.todoData}
+        <TodoList todos={visibleItems}
                   onDeleted={ this.deleteItem }
                   markAsDone={ this.markAsDone }
                   markAsImportant={ this.markAsImportant } />
