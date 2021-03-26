@@ -13,9 +13,9 @@ export default class App extends Component {
     super();
     this.state = {
       todoData: [
-        { label: 'Drink Coffee', id: 1 },
-        { label: 'Make Awesome App', id: 2 },
-        { label: 'Have a lunch', id: 3 }
+        { label: 'Drink Coffee', important: false, done: false, id: 1 },
+        { label: 'Make Awesome App', important: true, done: false, id: 2 },
+        { label: 'Have a lunch', important: false, done: true, id: 3 }
       ]
     };
   }
@@ -57,6 +57,14 @@ export default class App extends Component {
     });
   }
 
+  markAsDone = (id) => {
+    console.log('marked as done: ', id);
+  }
+
+  markAsImportant = (id) => {
+    console.log('marked as important: ', id);
+  }
+
   render() {
     return (
       <div className="todo-app">
@@ -66,7 +74,10 @@ export default class App extends Component {
           <ItemStatusFilter />
         </div>
 
-        <TodoList todos={this.state.todoData} onDeleted={ this.deleteItem } />
+        <TodoList todos={this.state.todoData}
+                  onDeleted={ this.deleteItem }
+                  markAsDone={ this.markAsDone }
+                  markAsImportant={ this.markAsImportant } />
         <AddTodoItem onItemAdded={ (text) => this.addItem(text) }/>
       </div>
     );
